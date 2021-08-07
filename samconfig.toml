@@ -1,0 +1,9 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "aptitude"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1gchiewpy2y0w"
+s3_prefix = "aptitude"
+region = "us-east-1"
+capabilities = "CAPABILITY_IAM"
