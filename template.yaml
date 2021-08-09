@@ -70,6 +70,56 @@ Resources:
         DynamoDBCrudPolicy:
           TableName: !Ref UserTable
 
+  QuestionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: question/
+      Handler: app.handler
+      Runtime: nodejs14.x
+      Events:
+        GetQuestion:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AptitudeApi
+            Path: /question
+            Method: GET
+            Auth:
+              Authorizer: NONE
+        GetQuestions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AptitudeApi
+            Path: /questions
+            Method: GET
+            Auth:
+              Authorizer: NONE
+        CreateQuestion:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AptitudeApi
+            Path: /question
+            Method: PUT
+            Auth:
+              Authorizer: NONE
+        EditQuestion:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AptitudeApi
+            Path: /question
+            Method: POST
+            Auth:
+              Authorizer: NONE
+        DeleteQuestion:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AptitudeApi
+            Path: /question
+            Method: DELETE
+            Auth:
+              Authorizer: NONE
+
+
+
   # dynamodb
   UserTable:
     Type: AWS::Serverless::SimpleTable
@@ -80,7 +130,19 @@ Resources:
         Type: String
       ProvisionedThroughput:
         ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  QuestionTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: question
+      PrimaryKey:
+        Name: id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
         WriteCapacityUnits: 5 
+
 
 Outputs:
   ApiUrl:
