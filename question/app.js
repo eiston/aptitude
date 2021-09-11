@@ -6,7 +6,7 @@ const GET = 'GET';
 const POST = 'POST';
 
 
-const get = async (event) => {
+module.exports.getQuestion = async (event) => {
     try {
         const obj = event.queryStringParameters;
         const ID = obj.id;
@@ -33,10 +33,10 @@ const get = async (event) => {
         return {
             'statusCode': 500,
             'body': err
-        };;
+        };
     }
 }
-const post = async (event) => {
+module.exports.createQuestion = async (event) => {
     try {
         const obj = event.body;
         const ID = obj.id;
@@ -80,20 +80,3 @@ const post = async (event) => {
         };
     }
 }
-exports.handler = async (event) => {
-    const { httpMethod } = event;
-    switch (httpMethod) {
-        case POST:
-            return await post(event);
-        case GET:
-            return await get(event)
-        default:
-            return {
-                'statusCode': 404,
-                'body': JSON.stringify({
-                    message: 'method not implemented',
-                })
-            };
-    }
-
-};

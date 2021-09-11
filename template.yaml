@@ -103,11 +103,11 @@ Resources:
         DynamoDBCrudPolicy:
           TableName: !Ref UserTable
 
-  QuestionFunction:
+  GetQuestionFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: question/
-      Handler: app.handler
+      Handler: app.getQuestion
       Runtime: nodejs14.x
       Events:
         GetQuestion:
@@ -118,6 +118,13 @@ Resources:
             Method: GET
             Auth:
               Authorizer: NONE
+  GetQuestionsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: question/
+      Handler: app.getQuestions
+      Runtime: nodejs14.x
+      Events:
         GetQuestions:
           Type: Api
           Properties:
@@ -126,15 +133,14 @@ Resources:
             Method: GET
             Auth:
               Authorizer: NONE
+  CreateQuestionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: question/
+      Handler: app.createQuestion
+      Runtime: nodejs14.x
+      Events:
         CreateQuestion:
-          Type: Api
-          Properties:
-            RestApiId: !Ref AptitudeApi
-            Path: /question
-            Method: PUT
-            Auth:
-              Authorizer: NONE
-        EditQuestion:
           Type: Api
           Properties:
             RestApiId: !Ref AptitudeApi
@@ -142,6 +148,28 @@ Resources:
             Method: POST
             Auth:
               Authorizer: NONE
+  EditQuestionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: question/
+      Handler: app.editQuestion
+      Runtime: nodejs14.x
+      Events:
+        EditQuestion:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AptitudeApi
+            Path: /question
+            Method: PUT
+            Auth:
+              Authorizer: NONE
+  DeleteQuestionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: question/
+      Handler: app.deleteQuestion
+      Runtime: nodejs14.x
+      Events:
         DeleteQuestion:
           Type: Api
           Properties:
