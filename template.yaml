@@ -118,6 +118,9 @@ Resources:
             Method: GET
             Auth:
               Authorizer: NONE
+      Policies:
+        DynamoDBCrudPolicy:
+          TableName: !Ref QuestionTable
   GetQuestionsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -133,6 +136,9 @@ Resources:
             Method: GET
             Auth:
               Authorizer: NONE
+      Policies:
+        DynamoDBCrudPolicy:
+          TableName: !Ref QuestionTable
   CreateQuestionFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -148,6 +154,9 @@ Resources:
             Method: POST
             Auth:
               Authorizer: NONE
+      Policies:
+        DynamoDBCrudPolicy:
+          TableName: !Ref QuestionTable  
   EditQuestionFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -163,6 +172,9 @@ Resources:
             Method: PUT
             Auth:
               Authorizer: NONE
+      Policies:
+        DynamoDBCrudPolicy:
+          TableName: !Ref QuestionTable
   DeleteQuestionFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -178,6 +190,9 @@ Resources:
             Method: DELETE
             Auth:
               Authorizer: NONE
+      Policies:
+        DynamoDBCrudPolicy:
+          TableName: !Ref QuestionTable
 
 
 
