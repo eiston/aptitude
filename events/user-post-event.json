@@ -1,5 +1,5 @@
 {
-  "body": {"id":"1","name":"ram"},
+  "body": {"name":"ram"},
   "resource": "/{proxy+}",
   "path": "/user",
   "httpMethod": "POST",

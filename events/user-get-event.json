@@ -4,16 +4,14 @@
   "path": "/user",
   "httpMethod": "GET",
   "isBase64Encoded": true,
-  "queryStringParameters": {
-    "id": "1"
-  },
   "multiValueQueryStringParameters": {
     "foo": [
       "bar"
     ]
   },
   "pathParameters": {
-    "proxy": "/user"
+    "proxy": "/user",
+    "id": "8c9cc6a0-1332-11ec-a8fe-7f43bd063a7d"
   },
   "stageVariables": {
     "baz": "qux"
