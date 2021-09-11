@@ -27,29 +27,51 @@ Resources:
       Handler: app.handler
       Runtime: nodejs14.x
 
-  UserFunction:
+  GetUserFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: user/
-      Handler: app.handler
+      Handler: app.getUser
       Runtime: nodejs14.x
       Events:
         GetUser:
           Type: Api 
           Properties:
             RestApiId: !Ref AptitudeApi
-            Path: /user
+            Path: /user/{id}
             Method: GET
             Auth:
               Authorizer: NONE
+      Policies:
+        DynamoDBReadPolicy:
+          TableName: !Ref UserTable
+
+  EditProfileFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: user/
+      Handler: app.editProfile
+      Runtime: nodejs14.x
+      Events:
         EditProfile:
           Type: Api 
           Properties:
             RestApiId: !Ref AptitudeApi
-            Path: /user
+            Path: /user/{id}
             Method: PUT
             Auth:
               Authorizer: NONE
+      Policies:
+        DynamoDBWritePolicy:
+          TableName: !Ref UserTable
+
+  SignupFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: user/
+      Handler: app.signup
+      Runtime: nodejs14.x
+      Events:
         Signup:
           Type: Api 
           Properties:
@@ -58,11 +80,22 @@ Resources:
             Method: POST
             Auth:
               Authorizer: NONE
+      Policies:
+        DynamoDBWritePolicy:
+          TableName: !Ref UserTable
+
+  DeleteUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: user/
+      Handler: app.deleteUser
+      Runtime: nodejs14.x
+      Events:
         DeleteUser:
           Type: Api 
           Properties:
             RestApiId: !Ref AptitudeApi
-            Path: /user
+            Path: /user/{id}
             Method: DELETE
             Auth:
               Authorizer: NONE

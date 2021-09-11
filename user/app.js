@@ -1,90 +1,107 @@
 
 const AWS = require('aws-sdk');
-const ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
+const uuid = require('uuid');
+const db = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
+const TableName = 'user';
+const idAttributeName = 'id';
 
-const GET = 'GET';
-const POST = 'POST';
 
-
-const get = async (event) => {
+module.exports.getUser = async event => {
     try {
-        const obj = event.queryStringParameters;
-        const ID = obj.id;
-        const params = {
+        const body = await db.getItem({
             TableName: 'user',
             Key: {
-                id: { S: ID }
+                id: { S: event.pathParameters.id }
             }
-        };
-        let data;
-        try {
-            data = await ddb.getItem(params).promise();
-            console.log("Item read successfully:", data);
-        } catch (err) {
-            console.log("Error: ", err);
-            data = err;
-        }
+        }).promise();
         return {
-            'statusCode': 200,
-            'body': data
+            statusCode: 200,
+            body
         };
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
         return {
-            'statusCode': 500,
-            'body': err
-        };;
+            statusCode: 500,
+            body: error
+        };
     }
 }
-const post = async (event) => {
+
+module.exports.editProfile = async event => {
     try {
-        const obj = event.body;
-        const ID = obj.id;
-        const NAME = obj.name;
-        const params = {
-            TableName: 'user',
-            Item: {
-                id: { S: ID },
-                name: { S: NAME }
-            }
-        };
-        let data;
-        let msg;
-        try {
-            data = await ddb.putItem(params).promise();
-            console.log("Item entered successfully:", data);
-            msg = 'Item entered successfully';
-        } catch (err) {
-            console.log("Error: ", err);
-            msg = err;
-        }
-        return {
-            'statusCode': 200,
-            'body': msg
+        var params = {
+            TableName,
+            Key: {
+                id: event.pathParameters.id
+            },
+            ExpressionAttributeValues: {},
+            ExpressionAttributeNames: {},
+            UpdateExpression: "",
+            ReturnValues: "UPDATED_NEW"
         };
 
-    } catch (err) {
-        console.log(err);
+        let prefix = "set ";
+        let attributes = Object.keys(item);
+        for (let i = 0; i < attributes.length; i++) {
+            let attribute = attributes[i];
+            if (attribute != idAttributeName) {
+                params["UpdateExpression"] += prefix + "#" + attribute + " = :" + attribute;
+                params["ExpressionAttributeValues"][":" + attribute] = item[attribute];
+                params["ExpressionAttributeNames"]["#" + attribute] = attribute;
+                prefix = ", ";
+            }
+        }
+        const body = await documentClient.updateItem(params).promise();
+
         return {
-            'statusCode': 500,
-            'body': err
+            statusCode: 200,
+            body
+        };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: error
+        };
+    }
+};
+
+
+module.exports.signup = async event => {
+    const Item = {
+        id: { S: uuid.v1() },
+        name: { S: event.body.name }
+    }
+    try {
+        await db.putItem({
+            TableName: 'user',
+            Item
+        }).promise();
+        return {
+            statusCode: 200,
+            body: Item
+        };
+
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: error
         };
     }
 }
-exports.handler = async (event) => {
-    const { httpMethod } = event;
-    switch (httpMethod) {
-        case POST:
-            return await post(event);
-        case GET:
-            return await get(event)
-        default:
-            return {
-                'statusCode': 404,
-                'body': JSON.stringify({
-                    message: 'method not implemented',
-                })
-            };
-    }
 
+module.exports.deleteUser = async event => {
+    try {
+        await db.deleteItem({
+            TableName,
+            Key: {
+                id: event.pathParameters.id
+            }
+        }).promise();
+
+        return { statusCode: 200 };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: error
+        };
+    }
 };
