@@ -168,7 +168,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref AptitudeApi
-            Path: /question
+            Path: /question/{id}
             Method: PUT
             Auth:
               Authorizer: NONE

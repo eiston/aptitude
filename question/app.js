@@ -36,6 +36,7 @@ module.exports.getQuestion = async (event) => {
         };
     }
 }
+
 module.exports.createQuestion = async (event) => {
     try {
         const obj = event.body;
@@ -80,3 +81,41 @@ module.exports.createQuestion = async (event) => {
         };
     }
 }
+
+module.exports.editQuestion = async (event) => {
+    try {
+        var params = {
+            TableName,
+            Key: {
+                id: event.pathParameters.id
+            },
+            ExpressionAttributeValues: {},
+            ExpressionAttributeNames: {},
+            UpdateExpression: "",
+            ReturnValues: "UPDATED_NEW"
+        };
+
+        let prefix = "set ";
+        let attributes = Object.keys(item);
+        for (let i = 0; i < attributes.length; i++) {
+            let attribute = attributes[i];
+            if (attribute != idAttributeName) {
+                params["UpdateExpression"] += prefix + "#" + attribute + " = :" + attribute;
+                params["ExpressionAttributeValues"][":" + attribute] = item[attribute];
+                params["ExpressionAttributeNames"]["#" + attribute] = attribute;
+                prefix = ", ";
+            }
+        }
+        const body = await documentClient.updateItem(params).promise();
+
+        return {
+            statusCode: 200,
+            body
+        };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: error
+        };
+    }
+};
