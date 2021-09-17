@@ -29,7 +29,7 @@ module.exports.getUser = async event => {
 module.exports.editProfile = async event => {
     try {
         var params = {
-            TableName,
+            TableName: 'user',
             Key: {
                 id: event.pathParameters.id
             },

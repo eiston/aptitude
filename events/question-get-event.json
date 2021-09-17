@@ -1,18 +1,14 @@
 {
-  "body": {
-    "question":"What is the square root of 9?", 
-    "answer": "3",
-    "wrongAnswers": ["1", "2", "2.5", "5"]
-  },
+  "body": {},
   "resource": "/{proxy+}",
-  "path": "/question/1",
-  "httpMethod": "PUT",
+  "path": "/question",
+  "httpMethod": "GET",
   "isBase64Encoded": true,
   "queryStringParameters": {},
   "multiValueQueryStringParameters": {},
   "pathParameters": {
     "proxy": "/question",
-    "id": "1"
+    "id": "44e71b20-17a2-11ec-9d6c-9fabe8cc1c17"
   },
   "stageVariables": {
     "baz": "qux"
